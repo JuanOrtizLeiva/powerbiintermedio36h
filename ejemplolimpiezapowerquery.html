@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Soluciones Power Query - Instituto Tecnipro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0063B2 0%, #1a8ad3 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 3px solid #e0e0e0;
+            overflow-x: auto;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8f9fa;
+            border: none;
+            font-size: 15px;
+            color: #495057;
+            transition: all 0.3s ease;
+            position: relative;
+            min-width: 200px;
+        }
+        
+        .nav-tab:hover {
+            background: #e9ecef;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            color: #0063B2;
+            font-weight: 500;
+        }
+        
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #0063B2;
+        }
+        
+        .content-area {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Casos de Uso */
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .use-case-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .use-case-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            border-color: #0063B2;
+        }
+        
+        .use-case-card h3 {
+            color: #0063B2;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+        }
+        
+        .use-case-card .icon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        
+        .use-case-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .use-case-card .example {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #495057;
+        }
+        
+        /* Soluciones */
+        .solution-box {
+            background: #e6f3ff;
+            border-left: 5px solid #0063B2;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .solution-box h4 {
+            color: #0063B2;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .steps-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .steps-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        
+        .steps-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #0063B2;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Calculadora de limpieza */
+        .data-cleaner {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .sample-data {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .sample-data h4 {
+            color: #0063B2;
+            margin-bottom: 15px;
+        }
+        
+        .data-display {
+            font-family: 'Consolas', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+        
+        .transformation-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .transform-btn {
+            background: white;
+            border: 2px solid #17a2b8;
+            color: #17a2b8;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .transform-btn:hover {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .transform-btn.active {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        /* Plantillas */
+        .template-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .template-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .template-card h4 {
+            color: #17a2b8;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .template-steps {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        
+        /* Diagnóstico */
+        .diagnostic-tool {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+        }
+        
+        .check-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .check-item .status {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .status.good {
+            background: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .status.warning {
+            background: #fff5eb;
+            color: #ff9800;
+        }
+        
+        .status.error {
+            background: #ffebee;
+            color: #f44336;
+        }
+        
+        /* Tips y alertas */
+        .tip-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .warning-box {
+            background: #fff5eb;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .info-box {
+            background: #e6f3ff;
+            border-left: 4px solid #0063B2;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* Botones de acción */
+        .action-button {
+            background: #0063B2;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .action-button:hover {
+            background: #004a8c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,99,178,0.3);
+        }
+        
+        .secondary-button {
+            background: white;
+            color: #0063B2;
+            border: 2px solid #0063B2;
+            padding: 10px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .secondary-button:hover {
+            background: #0063B2;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .use-case-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tab {
+                font-size: 13px;
+                padding: 15px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>🏢 Centro de Soluciones Power Query</h1>
+            <p>Resuelve los desafíos más comunes de limpieza y transformación de datos</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('casos')">
+                💼 Casos de Uso Comunes
+            </button>
+            <button class="nav-tab" onclick="showTab('limpieza')">
+                🧹 Asistente de Limpieza
+            </button>
+            <button class="nav-tab" onclick="showTab('plantillas')">
+                📋 Plantillas Listas
+            </button>
+            <button class="nav-tab" onclick="showTab('diagnostico')">
+                🔍 Diagnóstico de Datos
+            </button>
+            <button class="nav-tab" onclick="showTab('tips')">
+                💡 Tips Rápidos
+            </button>
+        </div>
+        
+        <div class="content-area">
+            <!-- Tab 1: Casos de Uso Comunes -->
+            <div id="casos" class="tab-content active">
+                <h2 style="color: #0063B2; margin-bottom: 30px;">Casos de Uso Más Frecuentes en el Área Administrativa</h2>
+                
+                <div class="use-case-grid">
+                    <div class="use-case-card" onclick="showSolution('consolidar-reportes')">
+                        <h3><span class="icon">📊</span> Consolidar Reportes Mensuales</h3>
+                        <p>Necesito unir reportes de ventas de diferentes meses que están en archivos Excel separados.</p>
+                        <div class="example">
+                            <strong>Ejemplo:</strong> Ventas_Enero.xlsx, Ventas_Febrero.xlsx, Ventas_Marzo.xlsx → Ventas_Trimestre1
+                        </div>
+                    </div>
+                    
+                    <div class="use-case-card" onclick="showSolution('limpiar-nombres')">
+                        <h3><span class="icon">👥</span> Estandarizar Nombres de Clientes</h3>
+                        <p>Los nombres de clientes vienen en diferentes formatos y necesito unificarlos para evitar duplicados.</p>
+                        <div class="example">
+                            <strong>Ejemplo:</strong> "JUAN PEREZ", "juan perez", "Juan  Pérez" → "Juan Pérez"
+                        </div>
+                    </div>
+                    
+                    <div class="use-case-card" onclick="showSolution('categorizar-gastos')">
+                        <h3><span class="icon">💰</span> Categorizar Gastos Automáticamente</h3>
+                        <p>Tengo una lista de gastos y necesito asignarles categorías según el monto o descripción.</p>
+                        <div class="example">
+                            <strong>Ejemplo:</strong> Gastos > $10,000 = "Alto", $5,000-$10,000 = "Medio", < $5,000 = "Bajo"
+                        </div>
+                    </div>
+                    
+                    <div class="use-case-card" onclick="showSolution('limpiar-rut')">
+                        <h3><span class="icon">🆔</span> Formatear RUT/ID Correctamente</h3>
+                        <p>Los RUT vienen con puntos, guiones o sin formato y necesito estandarizarlos.</p>
+                        <div class="example">
+                            <strong>Ejemplo:</strong> "12345678-9", "12.345.678-9", "123456789" → "12.345.678-9"
+                        </div>
+                    </div>
+                    
+                    <div class="use-case-card" onclick="showSolution('calcular-antiguedad')">
+                        <h3><span class="icon">📅</span> Calcular Antigüedad de Empleados</h3>
+                        <p>Necesito calcular automáticamente los años de servicio basándome en la fecha de ingreso.</p>
+                        <div class="example">
+                            <strong>Ejemplo:</strong> Fecha Ingreso: 15/03/2020 → Antigüedad: 4 años
+                        </div>
+                    </div>
+                    
+                    <div class="use-case-card" onclick="showSolution('resumir-ventas')">
+                        <h3><span class="icon">📈</span> Resumir Ventas por Región</h3>
+                        <p>Tengo ventas detalladas y necesito un resumen por región con totales y promedios.</p>
+                        <div class="example">
+                            <strong>Ejemplo:</strong> 1000 transacciones → Resumen: Norte $2.5M, Sur $1.8M, Centro $3.2M
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="solution-display"></div>
+            </div>
+            
+            <!-- Tab 2: Asistente de Limpieza -->
+            <div id="limpieza" class="tab-content">
+                <h2 style="color: #0063B2; margin-bottom: 30px;">Asistente Interactivo de Limpieza de Datos</h2>
+                
+                <div class="data-cleaner">
+                    <div class="sample-data">
+                        <h4>Datos de Ejemplo - Experimenta con las transformaciones</h4>
+                        <div class="data-display">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #0063B2;">
+                                        <th style="padding: 10px; text-align: left;">Nombre Cliente</th>
+                                        <th style="padding: 10px; text-align: left;">RUT</th>
+                                        <th style="padding: 10px; text-align: left;">Monto Compra</th>
+                                        <th style="padding: 10px; text-align: left;">Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sample-table">
+                                    <tr>
+                                        <td style="padding: 10px;">MARIA GONZALEZ  </td>
+                                        <td style="padding: 10px;">12345678-9</td>
+                                        <td style="padding: 10px;">$1,250.00</td>
+                                        <td style="padding: 10px;">15/03/2024</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px;">juan carlos silva</td>
+                                        <td style="padding: 10px;">98.765.432-1</td>
+                                        <td style="padding: 10px;">$ 850</td>
+                                        <td style="padding: 10px;">2024-03-16</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px;">  Ana López</td>
+                                        <td style="padding: 10px;">11222333-4</td>
+                                        <td style="padding: 10px;">2,100.50</td>
+                                        <td style="padding: 10px;">16/03/24</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <h4 style="margin-top: 25px; color: #0063B2;">Aplica estas transformaciones:</h4>
+                        <div class="transformation-options">
+                            <button class="transform-btn" onclick="applyClean('trim')">
+                                ✂️ Quitar espacios extras
+                            </button>
+                            <button class="transform-btn" onclick="applyClean('properCase')">
+                                📝 Formato nombre propio
+                            </button>
+                            <button class="transform-btn" onclick="applyClean('formatRut')">
+                                🆔 Formatear RUT
+                            </button>
+                            <button class="transform-btn" onclick="applyClean('cleanMoney')">
+                                💲 Limpiar montos
+                            </button>
+                            <button class="transform-btn" onclick="applyClean('standardDate')">
+                                📅 Estandarizar fechas
+                            </button>
+                            <button class="transform-btn" onclick="resetSampleData()">
+                                🔄 Restaurar original
+                            </button>
+                        </div>
+                        
+                        <div id="transformation-result"></div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>💡 Tip:</strong> En Power Query, estas transformaciones se aplican en el orden que las selecciones. 
+                        Cada transformación se guarda como un "paso" que puedes modificar o eliminar más tarde.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Plantillas Listas -->
+            <div id="plantillas" class="tab-content">
+                <h2 style="color: #0063B2; margin-bottom: 30px;">Plantillas de Transformación Listas para Usar</h2>
+                
+                <div class="template-card">
+                    <h4>📊 Plantilla: Consolidación de Reportes Mensuales</h4>
+                    <p>Use esta secuencia cuando necesite unir múltiples archivos Excel con la misma estructura.</p>
+                    <div class="template-steps">
+                        <ol class="steps-list">
+                            <li>En Power BI Desktop, vaya a <strong>Obtener datos → Carpeta</strong></li>
+                            <li>Seleccione la carpeta donde están todos sus archivos mensuales</li>
+                            <li>Power Query mostrará todos los archivos. Haga clic en <strong>Combinar → Combinar y transformar</strong></li>
+                            <li>Seleccione la hoja que contiene los datos (generalmente "Hoja1")</li>
+                            <li>Power Query unirá automáticamente todos los archivos</li>
+                            <li>Agregue una columna personalizada para identificar el mes: <strong>Agregar columna → Columna personalizada</strong></li>
+                            <li>Aplique las transformaciones de limpieza necesarias</li>
+                            <li>Haga clic en <strong>Cerrar y aplicar</strong></li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="template-card">
+                    <h4>👥 Plantilla: Base de Datos de Clientes Limpia</h4>
+                    <p>Secuencia completa para estandarizar información de clientes.</p>
+                    <div class="template-steps">
+                        <ol class="steps-list">
+                            <li>Seleccione las columnas de texto (Nombre, Dirección, Ciudad)</li>
+                            <li>Aplique <strong>Transformar → Formato → Recortar</strong> para quitar espacios</li>
+                            <li>Aplique <strong>Transformar → Formato → Limpiar</strong> para caracteres invisibles</li>
+                            <li>Para nombres: <strong>Transformar → Formato → Poner cada palabra en mayúsculas</strong></li>
+                            <li>Para RUT: Cree columna personalizada con formato correcto</li>
+                            <li>Elimine duplicados: <strong>Inicio → Quitar filas → Quitar duplicados</strong></li>
+                            <li>Valide que no haya valores vacíos en campos obligatorios</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="template-card">
+                    <h4>📈 Plantilla: Análisis de Ventas por Período</h4>
+                    <p>Transforme datos transaccionales en resúmenes gerenciales.</p>
+                    <div class="template-steps">
+                        <ol class="steps-list">
+                            <li>Asegúrese de que la columna de fecha tenga el tipo correcto</li>
+                            <li>Agregue columnas de año y mes: <strong>Agregar columna → Fecha → Año/Mes</strong></li>
+                            <li>Vaya a <strong>Transformar → Agrupar por</strong></li>
+                            <li>Agrupe por: Año, Mes, Producto (o las dimensiones que necesite)</li>
+                            <li>Agregue las operaciones: Suma de Ventas, Promedio de Ventas, Cantidad de transacciones</li>
+                            <li>Ordene por fecha descendente para ver los datos más recientes primero</li>
+                            <li>Aplique formato de moneda a las columnas numéricas</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Diagnóstico de Datos -->
+            <div id="diagnostico" class="tab-content">
+                <h2 style="color: #0063B2; margin-bottom: 30px;">Diagnóstico Rápido de Calidad de Datos</h2>
+                
+                <div class="diagnostic-tool">
+                    <p style="margin-bottom: 25px;">Use esta lista de verificación para identificar problemas comunes en sus datos antes de crear reportes:</p>
+                    
+                    <div class="check-item">
+                        <div>
+                            <strong>Espacios innecesarios en textos</strong>
+                            <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">Espacios al inicio, final o múltiples espacios entre palabras</p>
+                        </div>
+                        <div class="status warning">⚠️</div>
+                    </div>
+                    
+                    <div class="check-item">
+                        <div>
+                            <strong>Formatos de fecha inconsistentes</strong>
+                            <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">DD/MM/YYYY, MM-DD-YYYY, YYYY/MM/DD mezclados</p>
+                        </div>
+                        <div class="status error">❌</div>
+                    </div>
+                    
+                    <div class="check-item">
+                        <div>
+                            <strong>Mayúsculas y minúsculas inconsistentes</strong>
+                            <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">JUAN PÉREZ, juan pérez, Juan Pérez</p>
+                        </div>
+                        <div class="status warning">⚠️</div>
+                    </div>
+                    
+                    <div class="check-item">
+                        <div>
+                            <strong>Valores monetarios con símbolos</strong>
+                            <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">$1,250.00, $ 1250, 1250.00</p>
+                        </div>
+                        <div class="status good">✓</div>
+                    </div>
+                    
+                    <div class="check-item">
+                        <div>
+                            <strong>Duplicados potenciales</strong>
+                            <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">Mismos clientes con variaciones en el nombre</p>
+                        </div>
+                        <div class="status error">❌</div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>⚠️ Importante:</strong> Corrija estos problemas en Power Query antes de crear visualizaciones. 
+                        Los datos limpios son la base de reportes confiables.
+                    </div>
+                    
+                    <button class="action-button" style="margin-top: 20px;" onclick="showDiagnosticSteps()">
+                        Ver Pasos para Corregir Estos Problemas
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Tips Rápidos -->
+            <div id="tips" class="tab-content">
+                <h2 style="color: #0063B2; margin-bottom: 30px;">Tips Rápidos para el Día a Día</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="tip-box">
+                        <strong>🚀 Filtrar antes de transformar</strong><br>
+                        Si solo necesita datos del último año, filtre primero. Esto hace que todas las transformaciones sean más rápidas.
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>📋 Duplicar columnas antes de transformar</strong><br>
+                        Si no está seguro del resultado, duplique la columna original. Así siempre puede volver atrás.
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>🔄 Use "Columna de ejemplos"</strong><br>
+                        Power Query puede detectar patrones. Escriba 2-3 ejemplos y él completará el resto automáticamente.
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>📊 Agrupe datos temprano</strong><br>
+                        Si su reporte final es un resumen, agrupe los datos en Power Query, no en Power BI. Es más eficiente.
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>🗓️ Columnas de fecha inteligentes</strong><br>
+                        Agregue columnas de Año, Trimestre, Mes desde el principio. Facilitará mucho sus análisis temporales.
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>💾 Nombre sus pasos claramente</strong><br>
+                        En lugar de "Filas filtradas1", use "Filtrar solo ventas 2024". Su yo futuro se lo agradecerá.
+                    </div>
+                </div>
+                
+                <div class="info-box" style="margin-top: 30px;">
+                    <h4 style="margin-top: 0;">📌 El tip más importante:</h4>
+                    <p>Power Query registra cada acción como un paso. Si algo sale mal, simplemente elimine ese paso y vuelva a intentarlo. 
+                    <strong>No hay forma de "romper" los datos originales</strong> - Power Query nunca los modifica.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Cambiar tabs
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.nav-tab');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Mostrar soluciones para casos de uso
+        function showSolution(caso) {
+            const solutionDiv = document.getElementById('solution-display');
+            let content = '';
+            
+            switch(caso) {
+                case 'consolidar-reportes':
+                    content = `
+                        <div class="solution-box">
+                            <h4>✅ Solución: Consolidar Reportes Mensuales</h4>
+                            <ol class="steps-list">
+                                <li>En Power BI Desktop, haga clic en <strong>Obtener datos → Más → Carpeta</strong></li>
+                                <li>Navegue y seleccione la carpeta que contiene todos sus archivos mensuales</li>
+                                <li>Power Query mostrará la lista de archivos. Verifique que estén todos</li>
+                                <li>Haga clic en el botón <strong>Combinar → Combinar y transformar datos</strong></li>
+                                <li>En la ventana que aparece, seleccione la tabla o hoja que contiene sus datos</li>
+                                <li>Power Query creará automáticamente una consulta que une todos los archivos</li>
+                                <li>Agregue una columna con el nombre del archivo para identificar cada mes</li>
+                                <li>Aplique las transformaciones de limpieza necesarias</li>
+                                <li>Haga clic en <strong>Cerrar y aplicar</strong> cuando termine</li>
+                            </ol>
+                            <div class="tip-box" style="margin-top: 20px;">
+                                <strong>💡 Tip Pro:</strong> Si agrega nuevos archivos mensuales a la carpeta, solo necesita actualizar 
+                                y Power Query los incluirá automáticamente.
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'limpiar-nombres':
+                    content = `
+                        <div class="solution-box">
+                            <h4>✅ Solución: Estandarizar Nombres de Clientes</h4>
+                            <ol class="steps-list">
+                                <li>Seleccione la columna con los nombres de clientes</li>
+                                <li>Vaya a <strong>Transformar → Formato → Recortar</strong> (elimina espacios extras)</li>
+                                <li>Luego <strong>Transformar → Formato → Limpiar</strong> (elimina caracteres invisibles)</li>
+                                <li>Aplique <strong>Transformar → Formato → Poner cada palabra en mayúsculas</strong></li>
+                                <li>Para casos especiales (Ej: "de", "la"), use <strong>Reemplazar valores</strong></li>
+                                <li>Revise la vista previa para verificar que todos los nombres estén correctos</li>
+                                <li>Para encontrar duplicados: <strong>Inicio → Agrupar por</strong> y cuente las ocurrencias</li>
+                            </ol>
+                            <div class="warning-box" style="margin-top: 20px;">
+                                <strong>⚠️ Atención:</strong> Antes de eliminar duplicados, verifique que realmente sean el mismo cliente 
+                                y no clientes diferentes con nombres similares.
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'categorizar-gastos':
+                    content = `
+                        <div class="solution-box">
+                            <h4>✅ Solución: Categorizar Gastos Automáticamente</h4>
+                            <ol class="steps-list">
+                                <li>Vaya a <strong>Agregar columna → Columna personalizada</strong></li>
+                                <li>Nombre la columna como "Categoría_Gasto"</li>
+                                <li>Use esta estructura de condiciones:<br>
+                                    <code style="background: #f8f9fa; padding: 10px; display: block; margin: 10px 0; border-radius: 4px;">
+                                    if [Monto] > 10000 then "Alto"<br>
+                                    else if [Monto] > 5000 then "Medio"<br>
+                                    else "Bajo"
+                                    </code>
+                                </li>
+                                <li>Para categorías por descripción, use <strong>Text.Contains</strong>:<br>
+                                    <code style="background: #f8f9fa; padding: 10px; display: block; margin: 10px 0; border-radius: 4px;">
+                                    if Text.Contains([Descripción], "viaje") then "Viáticos"<br>
+                                    else if Text.Contains([Descripción], "almuerzo") then "Alimentación"<br>
+                                    else "Otros"
+                                    </code>
+                                </li>
+                                <li>Verifique que todas las filas tengan categoría asignada</li>
+                                <li>Si necesita más categorías, agregue más condiciones "else if"</li>
+                            </ol>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'limpiar-rut':
+                    content = `
+                        <div class="solution-box">
+                            <h4>✅ Solución: Formatear RUT Correctamente</h4>
+                            <ol class="steps-list">
+                                <li>Primero, elimine todos los puntos y guiones existentes:<br>
+                                    <strong>Transformar → Reemplazar valores</strong> → Buscar "." Reemplazar con "" (vacío)</li>
+                                <li>Repita para el guión: Buscar "-" Reemplazar con "" (vacío)</li>
+                                <li>Ahora tiene RUT sin formato (ej: 123456789)</li>
+                                <li>Cree una columna personalizada para agregar el formato:<br>
+                                    <strong>Agregar columna → Columna personalizada</strong></li>
+                                <li>Use esta fórmula para RUT chileno:<br>
+                                    <code style="background: #f8f9fa; padding: 10px; display: block; margin: 10px 0; border-radius: 4px;">
+                                    Text.Insert(Text.Insert(Text.Insert([RUT_Limpio], -1, "-"), -5, "."), -9, ".")
+                                    </code>
+                                </li>
+                                <li>Verifique que todos los RUT tengan el formato correcto</li>
+                                <li>Elimine la columna temporal sin formato</li>
+                            </ol>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'calcular-antiguedad':
+                    content = `
+                        <div class="solution-box">
+                            <h4>✅ Solución: Calcular Antigüedad de Empleados</h4>
+                            <ol class="steps-list">
+                                <li>Asegúrese de que la columna de fecha de ingreso sea tipo Fecha</li>
+                                <li>Vaya a <strong>Agregar columna → Columna personalizada</strong></li>
+                                <li>Nombre la columna "Años_Antigüedad"</li>
+                                <li>Use esta fórmula:<br>
+                                    <code style="background: #f8f9fa; padding: 10px; display: block; margin: 10px 0; border-radius: 4px;">
+                                    Duration.Days(DateTime.LocalNow() - [Fecha_Ingreso]) / 365.25
+                                    </code>
+                                </li>
+                                <li>Para redondear a años completos, modifique a:<br>
+                                    <code style="background: #f8f9fa; padding: 10px; display: block; margin: 10px 0; border-radius: 4px;">
+                                    Number.RoundDown(Duration.Days(DateTime.LocalNow() - [Fecha_Ingreso]) / 365.25)
+                                    </code>
+                                </li>
+                                <li>Cambie el tipo de la columna a Número entero</li>
+                                <li>Opcional: Cree categorías (Nuevo: 0-2 años, Experimentado: 3-5, Senior: 6+)</li>
+                            </ol>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'resumir-ventas':
+                    content = `
+                        <div class="solution-box">
+                            <h4>✅ Solución: Resumir Ventas por Región</h4>
+                            <ol class="steps-list">
+                                <li>Seleccione <strong>Transformar → Agrupar por</strong></li>
+                                <li>En "Agrupar por", seleccione la columna "Región"</li>
+                                <li>Agregue múltiples agregaciones haciendo clic en "Agregar agregación":</li>
+                                <li>Primera agregación: Nueva columna "Total_Ventas", Operación "Suma", Columna "Monto_Venta"</li>
+                                <li>Segunda agregación: Nueva columna "Promedio_Venta", Operación "Promedio", Columna "Monto_Venta"</li>
+                                <li>Tercera agregación: Nueva columna "Cantidad_Ventas", Operación "Contar filas"</li>
+                                <li>Cuarta agregación: Nueva columna "Venta_Máxima", Operación "Máx", Columna "Monto_Venta"</li>
+                                <li>Haga clic en Aceptar y revise el resumen generado</li>
+                                <li>Ordene por Total_Ventas descendente para ver las mejores regiones primero</li>
+                            </ol>
+                            <div class="tip-box" style="margin-top: 20px;">
+                                <strong>💡 Tip:</strong> Puede agrupar por múltiples columnas (Región + Vendedor) para análisis más detallados.
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            solutionDiv.innerHTML = content;
+            solutionDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Funciones de limpieza interactiva
+        function applyClean(type) {
+            const table = document.getElementById('sample-table');
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let row of rows) {
+                const cells = row.getElementsByTagName('td');
+                if (cells.length === 0) continue;
+                
+                switch(type) {
+                    case 'trim':
+                        cells[0].textContent = cells[0].textContent.trim();
+                        break;
+                        
+                    case 'properCase':
+                        cells[0].textContent = toProperCase(cells[0].textContent.trim());
+                        break;
+                        
+                    case 'formatRut':
+                        cells[1].textContent = formatRut(cells[1].textContent);
+                        break;
+                        
+                    case 'cleanMoney':
+                        cells[2].textContent = cleanMoney(cells[2].textContent);
+                        break;
+                        
+                    case 'standardDate':
+                        cells[3].textContent = standardizeDate(cells[3].textContent);
+                        break;
+                }
+            }
+            
+            showTransformationResult(type);
+        }
+        
+        function toProperCase(str) {
+            return str.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+        }
+        
+        function formatRut(rut) {
+            // Eliminar puntos y guiones
+            let cleaned = rut.replace(/[.-]/g, '');
+            // Agregar formato
+            if (cleaned.length >= 2) {
+                return cleaned.slice(0, -1).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') + '-' + cleaned.slice(-1);
+            }
+            return cleaned;
+        }
+        
+        function cleanMoney(money) {
+            // Eliminar símbolos y espacios
+            let cleaned = money.replace(/[$\s]/g, '').replace(/,/g, '');
+            // Agregar formato decimal si no existe
+            if (!cleaned.includes('.')) {
+                cleaned += '.00';
+            }
+            return cleaned;
+        }
+        
+        function standardizeDate(date) {
+            // Convertir diferentes formatos a DD/MM/YYYY
+            date = date.replace(/-/g, '/');
+            const parts = date.split('/');
+            if (parts.length === 3) {
+                if (parts[0].length === 4) {
+                    // YYYY/MM/DD
+                    return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+                } else if (parts[2].length === 2) {
+                    // DD/MM/YY
+                    return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/20${parts[2]}`;
+                }
+            }
+            return date;
+        }
+        
+        function resetSampleData() {
+            const table = document.getElementById('sample-table');
+            table.innerHTML = `
+                <tr>
+                    <td style="padding: 10px;">MARIA GONZALEZ  </td>
+                    <td style="padding: 10px;">12345678-9</td>
+                    <td style="padding: 10px;">$1,250.00</td>
+                    <td style="padding: 10px;">15/03/2024</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">juan carlos silva</td>
+                    <td style="padding: 10px;">98.765.432-1</td>
+                    <td style="padding: 10px;">$ 850</td>
+                    <td style="padding: 10px;">2024-03-16</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">  Ana López</td>
+                    <td style="padding: 10px;">11222333-4</td>
+                    <td style="padding: 10px;">2,100.50</td>
+                    <td style="padding: 10px;">16/03/24</td>
+                </tr>
+            `;
+            document.getElementById('transformation-result').innerHTML = '';
+        }
+        
+        function showTransformationResult(type) {
+            const resultDiv = document.getElementById('transformation-result');
+            const messages = {
+                'trim': '✅ Se eliminaron los espacios extras al inicio y final de los nombres',
+                'properCase': '✅ Los nombres ahora tienen formato correcto de nombre propio',
+                'formatRut': '✅ Los RUT ahora tienen formato estándar con puntos y guión',
+                'cleanMoney': '✅ Los montos ahora están limpios y listos para cálculos',
+                'standardDate': '✅ Las fechas ahora tienen formato consistente DD/MM/YYYY'
+            };
+            
+            resultDiv.innerHTML = `
+                <div class="tip-box" style="margin-top: 20px;">
+                    ${messages[type]}
+                </div>
+            `;
+        }
+        
+        function showDiagnosticSteps() {
+            const steps = `
+                <div class="solution-box" style="margin-top: 30px;">
+                    <h4>📋 Pasos para Corregir Problemas de Calidad de Datos</h4>
+                    <ol class="steps-list">
+                        <li><strong>Para espacios innecesarios:</strong><br>
+                            Seleccione todas las columnas de texto → Transformar → Formato → Recortar</li>
+                        <li><strong>Para formatos de fecha inconsistentes:</strong><br>
+                            Seleccione la columna de fecha → Transformar → Tipo de datos → Usando configuración regional</li>
+                        <li><strong>Para mayúsculas/minúsculas:</strong><br>
+                            Seleccione columnas de nombres → Transformar → Formato → Poner cada palabra en mayúsculas</li>
+                        <li><strong>Para valores monetarios:</strong><br>
+                            Transformar → Reemplazar valores → Elimine "$" y "," → Cambie tipo a Decimal</li>
+                        <li><strong>Para detectar duplicados:</strong><br>
+                            Inicio → Agrupar por → Agrupe por las columnas clave y cuente filas</li>
+                    </ol>
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>💡 Recuerde:</strong> Siempre puede ver y modificar cada paso en el panel 
+                        "Pasos aplicados" del lado derecho de Power Query.
+                    </div>
+                </div>
+            `;
+            
+            const diagnostic = document.querySelector('.diagnostic-tool');
+            const existingSteps = diagnostic.querySelector('.solution-box');
+            if (!existingSteps) {
+                diagnostic.insertAdjacentHTML('beforeend', steps);
+            }
+        }
+    </script>
+</body>
+</html>
